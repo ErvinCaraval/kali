@@ -1,0 +1,11 @@
+# Ignorar directorio de máquina virtual
+kali-linux-2025.4-virtualbox-amd64/
+
+# Ignorar archivo comprimido
+kali-linux-2025.4-virtualbox-amd64.7z
+
+# Archivos a subir:
+# - install_kali_docker.sh
+# - install_kali_menu.sh
+# - install_kali_vbox.sh
+# - README.md
