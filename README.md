@@ -615,72 +615,12 @@ VBoxManage modifyvm "Kali Linux 2025.4" --nic1 bridged --bridgeadapter1 eth0
 
 ```
 /home/ervin/Desktop/kali/
-├── README.md                          # Main documentation
-├── SETUP.md                           # ⭐ Installation setup guide
-├── QUICK_START.md                     # 5-minute quick reference
-├── NMAP_DEMONSTRATION.md              # Nmap theory & concepts
-├── NMAP_REAL_WORLD_SCENARIO.md        # Practical scenarios
-├── Makefile                           # Unified execution commands
-├── vulnerable-app.py                  # ⭐ Vulnerable application
-├── start-vulnerable-app.sh            # ⭐ Universal launcher script
-├── docker-compose.yml                 # Docker orchestration
-├── Dockerfile                         # Docker image config
-├── run_vulnerable_app.sh              # Linux quick launcher
-├── run_docker_vulnerable_app.sh       # Docker quick launcher
-├── install_kali_parrot_menu.sh        # Kali/Parrot installer menu
-├── install_kali_vbox.sh               # VirtualBox installer
-├── install_parrot_docker.sh           # Parrot Docker installer
-└── .gitignore                         # Git ignore rules
-```
-
-### Key Files for PoC Application
-
-| File | Purpose | Use |
-|------|---------|-----|
-| **vulnerable-app.py** | Vulnerable application with 5 services | Core application |
-| **start-vulnerable-app.sh** | Universal launcher (auto-detects environment) | ⭐ Recommended |
-| **Makefile** | Unified commands for both environments | `make help` |
-| **docker-compose.yml** | Docker orchestration | `docker-compose up` |
-| **SETUP.md** | Complete installation guide | Read first! |
-
----
-
-## 🚀 Quick Start - Both Environments
-
-### Kali Linux (VirtualBox)
-
-**Simplest Way:**
-```bash
-cd /home/ervin/Desktop/kali
-./start-vulnerable-app.sh
-```
-
-**Using Makefile:**
-```bash
-cd /home/ervin/Desktop/kali
-make kali-run
-```
-
-### Parrot OS (Docker)
-
-**Using Makefile:**
-```bash
-cd /home/ervin/Desktop/kali
-make docker-build
-make docker-up
-```
-
-**Using docker-compose:**
-```bash
-cd /home/ervin/Desktop/kali
-docker-compose up -d
-```
-
-**With Universal Script:**
-```bash
-# Inside Parrot container:
-cd /home/ervin/Desktop/kali
-./start-vulnerable-app.sh
+├── README.md                          # This file - Installation and configuration guide
+├── NMAP_DEMONSTRATION.md              # Nmap tool guide, Cyber Kill Chain, demonstrations
+├── install_kali_parrot_menu.sh        # Menu selection script
+├── install_kali_vbox.sh               # VirtualBox installation (Kali Linux)
+├── install_parrot_docker.sh           # Docker installation (Parrot OS)
+└── .gitignore                         # (Optional) Git ignore file
 ```
 
 ---
@@ -863,89 +803,6 @@ sudo docker run -it parrotsec/security \
 
 ---
 
-## 🎯 Real-World Nmap Scenarios with Vulnerable Application
-
-### Overview
-
-This project includes a **Proof-of-Concept (PoC) vulnerable application** to demonstrate Nmap in real-world conditions. The application intentionally contains multiple vulnerabilities to teach penetration testing concepts.
-
-### Vulnerable Application Features
-
-- **Web Server** (Port 8080) with SQL injection, path traversal, unprotected admin panel
-- **SSH Service** (Port 2222) - Old vulnerable version (OpenSSH 3.9p1 from 2003)
-- **FTP Service** (Port 2121) - Unencrypted file transfer protocol
-- **Telnet Service** (Port 2323) - Unencrypted remote access
-- **SMTP Service** (Port 2525) - Old Sendmail version (8.11.6 from 2001)
-
-### Quick Start: Running the Vulnerable App
-
-#### In Kali Linux (VirtualBox)
-
-**Terminal 1 - Run the vulnerable application:**
-```bash
-cd /home/ervin/Desktop/kali
-./run_vulnerable_app.sh
-
-# Or directly:
-python3 vulnerable-app.py
-```
-
-**Terminal 2 - Scan with Nmap:**
-```bash
-# Discover all services
-nmap -sV -p 8080,2222,2121,2323,2525 localhost
-
-# Aggressive scan
-sudo nmap -A localhost
-
-# Vulnerability detection
-nmap --script vuln localhost
-```
-
-#### In Parrot OS (Docker)
-
-**Option 1 - Using the easy script:**
-```bash
-cd /home/ervin/Desktop/kali
-./run_docker_vulnerable_app.sh
-# Then select option 1 to build, option 2 to run
-```
-
-**Option 2 - Manual Docker setup:**
-```bash
-# Build Docker image
-docker build -t vuln-app:latest .
-
-# Run vulnerability app container (in one terminal)
-docker run -it -p 8080:8080 -p 2222:2222 -p 2121:2121 -p 2323:2323 -p 2525:2525 \
-  vuln-app:latest
-
-# In another terminal, run Parrot with network access
-sudo docker run -it --network host parrotsec/security bash
-
-# Inside container, scan with nmap
-nmap -sV -p 8080,2222,2121,2323,2525 127.0.0.1
-```
-
-### What You Will Learn
-
-✅ How Nmap discovers services  
-✅ How to identify software versions and vulnerabilities  
-✅ Real exploitation scenarios and reconnaissance  
-✅ How to prioritize vulnerabilities  
-✅ Connection to Cyber Kill Chain (Reconnaissance phase)  
-
-### Complete Real-World Scenario Guide
-
-**→ See [NMAP_REAL_WORLD_SCENARIO.md](NMAP_REAL_WORLD_SCENARIO.md) for:**
-- Step-by-step setup instructions
-- 7 practical scanning scenarios
-- Vulnerability analysis
-- Attack surface mapping
-- Defense recommendations
-
----
-
 ## 📋 Configuration Checklist
 
 ### Before Presentation (Kali Linux)
@@ -1029,19 +886,6 @@ This project automates the installation of two penetration testing operating sys
    - Comparison with analogous tools
    - Educational exercises
 
-3. **NMAP_REAL_WORLD_SCENARIO.md** (practical lab guide)
-   - Real-world scanning scenarios
-   - Vulnerable application setup
-   - 7 practical demonstration scenarios
-   - Attack surface analysis
-   - Defense recommendations
-
-4. **Vulnerable Application** (proof-of-concept)
-   - `vulnerable-app.py` - Application with intentional vulnerabilities
-   - `run_vulnerable_app.sh` - Easy execution script (Python)
-   - `run_docker_vulnerable_app.sh` - Docker quick-start script
-   - `Dockerfile` - Docker container configuration
-
 ### Course Objectives Met
 
 ✅ Uses Kali Linux and Parrot OS operating systems  
@@ -1051,6 +895,4 @@ This project automates the installation of two penetration testing operating sys
 ✅ Includes assigned tool (Nmap) with full documentation  
 ✅ Identifies analogous tools with comparative analysis  
 ✅ Classifies tools within Cyber Kill Chain framework  
-✅ Provides demonstrations in both operating systems  
-✅ **Includes functional Proof-of-Concept vulnerable application**  
-✅ **Demonstrates real-world reconnaissance scenarios**
+✅ Provides demonstrations in both operating systems
