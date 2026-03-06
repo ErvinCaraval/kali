@@ -1,5 +1,5 @@
 #!/bin/bash
-# install_kali_docker.sh - Install Kali Linux in Docker with Nmap
+# install_parrot_docker.sh - Install Parrot Linux in Docker with Nmap
 
 set -e  # Exit on error
 
@@ -48,28 +48,39 @@ check_docker() {
     return 0
 }
 
-pull_kali_image() {
-    print_header "Pulling Kali Linux Image"
+pull_parrot_image() {
+    print_header "Pulling Parrot Linux Image"
     
-    print_info "Downloading Kali Linux rolling image (~800MB)..."
-    if sudo docker pull kalilinux/kali-rolling; then
-        print_success "Kali Linux image pulled successfully"
+    print_info "Downloading Parrot Security image (~1GB)..."
+    if sudo docker pull parrotsec/security; then
+        print_success "Parrot Linux image pulled successfully"
     else
-        print_error "Failed to pull Kali Linux image"
-        return 1
+        print_error "Failed to pull Parrot Linux image"
+        print_info "Trying alternative image name..."
+        if sudo docker pull parrot:latest; then
+            print_success "Parrot Linux image pulled successfully"
+        else
+            print_error "Could not download Parrot image"
+            return 1
+        fi
     fi
 }
 
-create_kali_with_nmap() {
-    print_header "Creating Kali Container with Nmap"
+create_parrot_with_nmap() {
+    print_header "Creating Parrot Container with Nmap"
     
     print_info "Creating container with Nmap pre-installed..."
     
-    # Create a temporary Dockerfile to install Nmap
-    CONTAINER_NAME="kali-linux-nmap-$(date +%s)"
+    # Determine which image is available
+    IMAGE_NAME="parrotsec/security"
+    if ! sudo docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
+        IMAGE_NAME="parrot:latest"
+    fi
+    
+    CONTAINER_NAME="parrot-linux-nmap-$(date +%s)"
     
     print_info "Installing Nmap in container..."
-    sudo docker run --rm kalilinux/kali-rolling bash -c \
+    sudo docker run --rm "$IMAGE_NAME" bash -c \
         "apt-get update && apt-get install -y nmap" > /dev/null 2>&1 && \
         print_success "Nmap installation completed" || \
         print_error "Warning: Nmap installation had issues"
@@ -80,8 +91,14 @@ create_kali_with_nmap() {
 show_docker_info() {
     print_header "Docker Usage Information"
     
-    echo -e "${GREEN}To start Kali with Nmap:${NC}"
-    echo -e "  ${BLUE}sudo docker run -it kalilinux/kali-rolling bash${NC}"
+    # Determine which image is available
+    IMAGE_NAME="parrotsec/security"
+    if ! sudo docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
+        IMAGE_NAME="parrot:latest"
+    fi
+    
+    echo -e "${GREEN}To start Parrot with Nmap:${NC}"
+    echo -e "  ${BLUE}sudo docker run -it $IMAGE_NAME bash${NC}"
     echo ""
     echo -e "${GREEN}To install Nmap inside the container:${NC}"
     echo -e "  ${BLUE}apt-get update && apt-get install -y nmap${NC}"
@@ -95,32 +112,43 @@ show_docker_info() {
     echo -e "  ${BLUE}docker ps${NC}                           # List running containers"
     echo -e "  ${BLUE}docker images${NC}                       # List downloaded images"
     echo -e "  ${BLUE}docker stop <container-id>${NC}          # Stop container"
+    echo ""
+    echo -e "${YELLOW}Note: This script uses parrotsec/security or parrot:latest images${NC}"
 }
 
 # Main execution
 main() {
-    print_header "Kali Linux Docker Installation"
+    print_header "Parrot Linux Docker Installation"
     
     check_docker || {
         print_error "Please run 'newgrp docker' or log out and back in, then restart the script"
         exit 1
     }
     
-    pull_kali_image || exit 1
-    create_kali_with_nmap || print_info "Continuing despite potential issues..."
+    pull_parrot_image || exit 1
+    create_parrot_with_nmap || print_info "Continuing despite potential issues..."
     
     print_header "Installation Complete!"
     show_docker_info
     
-    read -p "Start Kali Linux container now? (y/n) " -n 1 -r
+    read -p "Start Parrot Linux container now? (y/n) " -n 1 -r
     echo
     
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        print_info "Starting Kali Linux container..."
-        sudo docker run -it kalilinux/kali-rolling /bin/bash
+        print_info "Starting Parrot Linux container..."
+        # Determine which image is available
+        IMAGE_NAME="parrotsec/security"
+        if ! sudo docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
+            IMAGE_NAME="parrot:latest"
+        fi
+        sudo docker run -it "$IMAGE_NAME" /bin/bash
     else
         print_info "You can start the container anytime with:"
-        echo -e "  ${BLUE}sudo docker run -it kalilinux/kali-rolling /bin/bash${NC}"
+        IMAGE_NAME="parrotsec/security"
+        if ! sudo docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
+            IMAGE_NAME="parrot:latest"
+        fi
+        echo -e "  ${BLUE}sudo docker run -it $IMAGE_NAME /bin/bash${NC}"
     fi
 }
 

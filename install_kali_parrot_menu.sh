@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# install_kali_menu.sh
-# Menu-driven script for installing Kali Linux
+# install_kali_parrot_menu.sh
+# Menu-driven script for installing Kali Linux and Parrot OS
 
 echo "======================================="
 echo "      Kali Linux Setup Menu            "
@@ -26,10 +26,10 @@ case $choice in
         ;;
     2)
         echo "Starting Docker installation..."
-        if [ -f "./install_kali_docker.sh" ]; then
-            ./install_kali_docker.sh
+        if [ -f "./install_parrot_docker.sh" ]; then
+            ./install_parrot_docker.sh
         else
-            echo "Error: install_kali_docker.sh not found in the current directory."
+            echo "Error: install_parrot_docker.sh not found in the current directory."
         fi
         ;;
     3)
