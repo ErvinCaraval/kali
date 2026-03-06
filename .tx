@@ -1,9 +1,0 @@
-./install_kali_menu.sh  # Select option 2 (Docker)
-# Then run: sudo docker run -it kalilinux/kali-rolling bash
-# Inside container: apt-get update && apt-get install -y nmap
-
-
-./install_kali_menu.sh  # Select option 1 (VirtualBox)
-# After VM starts, open terminal and run:
-sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install -y nmap
