@@ -11,7 +11,8 @@ This repository contains automated scripts to install Kali Linux and Parrot OS u
 3. [Quick Start](#quick-start)
 4. [Using install_kali_parrot_menu.sh](#using-install_kali_parrot_menush)
 5. [Installation Methods](#installation-methods)
-6. [Troubleshooting](#troubleshooting)
+6. [Nmap Tool Documentation](#-available-tools-by-installation)
+7. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -151,51 +152,51 @@ The menu script automatically:
 
 ---
 
-## 🎯 Justificación de Modalidades de Instalación
+## 🎯 Installation Modality Justification
 
-Este proyecto implementa dos modalidades diferentes de instalación para cumplir con los objetivos educativos del curso:
+This project implements two different installation modalities to meet the educational objectives of the course:
 
-### Por Qué VirtualBox para Kali Linux
+### Why VirtualBox for Kali Linux
 
-**Justificación:**
-- ✅ **Interfaz Gráfica Completa:** Kali Linux requiere acceso a herramientas GUI para demostrar y enseñar de manera visual
-- ✅ **Entorno Aislado:** VirtualBox proporciona aislamiento completo del sistema anfitrión
-- ✅ **Snapshots:** Permite crear puntos de control antes de temas prácticos delicados
-- ✅ **Persistencia:** Los cambios permanecen entre sesiones, ideal para laboratorios multiday
-- ✅ **Acceso Completo:** Control total del SO incluido red, permisos, kernels
+**Justification:**
+- ✅ **Full Graphical Interface:** Kali Linux requires access to GUI tools for visual demonstrations and teaching
+- ✅ **Isolated Environment:** VirtualBox provides complete isolation from the host system
+- ✅ **Snapshots:** Allows creating checkpoints before sensitive practical topics
+- ✅ **Persistence:** Changes remain between sessions, ideal for multi-day labs
+- ✅ **Full Access:** Complete OS control including networking, permissions, and kernels
 
-**Casos de uso:**
-- Presentaciones interactivas de herramientas de penetración
-- Laboratorios prácticos extensos
-- Demostraciones de escritorio y GUI tools
+**Use Cases:**
+- Interactive presentations of penetration testing tools
+- Extended practical labs
+- Desktop and GUI tool demonstrations
 
-### Por Qué Docker para Parrot OS
+### Why Docker for Parrot OS
 
-**Justificación:**
-- ✅ **Ligero:** Perfecto para demostrar herramientas CLI sin overhead del hypervisor
-- ✅ **Portabilidad:** Funciona igual en cualquier máquina con Docker
-- ✅ **Reproducibilidad:** Garantiza que todos tengan el mismo entorno exacto
-- ✅ **Eficiencia de Recursos:** Usa menos CPU, RAM y disco que VirtualBox
-- ✅ **Rápido Deployment:** Pronto acceso a herramientas para demostraciones rápidas
-- ✅ **Escalabilidad:** Fácil crear múltiples instancias para laboratorios
+**Justification:**
+- ✅ **Lightweight:** Perfect for demonstrating CLI tools without hypervisor overhead
+- ✅ **Portability:** Works identically on any machine with Docker
+- ✅ **Reproducibility:** Guarantees everyone has the exact same environment
+- ✅ **Resource Efficiency:** Uses less CPU, RAM, and disk than VirtualBox
+- ✅ **Fast Deployment:** Quick access to tools for rapid demonstrations
+- ✅ **Scalability:** Easy to create multiple instances for labs
 
-**Casos de uso:**
-- Demostraciones CLI rápidas
-- Herramientas de línea de comandos específicas
-- Laboratorios cortos y pruebas de conceptos
-- Ejercicios de scripting y automatización
+**Use Cases:**
+- Quick CLI demonstrations
+- Specific command-line tools
+- Short labs and proof-of-concept tests
+- Scripting and automation exercises
 
-### Comparación de Modalidades
+### Modality Comparison
 
-| Aspecto | VirtualBox (Kali) | Docker (Parrot) |
-|--------|------------------|-----------------|
-| **Curva de Aprendizaje** | Baja | Media |
-| **Recursos Necesarios** | Altos | Bajos |
-| **Tiempo Startup** | 30-60 seg | 1-2 seg |
-| **Interfaz** | GUI Completo | CLI |
-| **Persistencia** | Automática | Configurable |
-| **Aislamiento** | Total | Total |
-| **Ideal para** | Cursos extensos | Demostraciones CLI |
+| Aspect | VirtualBox (Kali) | Docker (Parrot) |
+|--------|-------------------|---------------------|
+| **Learning Curve** | Low | Medium |
+| **Resources Required** | High | Low |
+| **Startup Time** | 30-60 sec | 1-2 sec |
+| **Interface** | Full GUI | CLI |
+| **Persistence** | Automatic | Configurable |
+| **Isolation** | Complete | Complete |
+| **Ideal for** | Extended Courses | CLI Demonstrations |
 
 ---
 
@@ -293,13 +294,18 @@ apt-get install -y nmap metasploit-framework
 
 ---
 
-## 📚 Documentación Detallada del Proceso de Instalación
+## 📚 Detailed Installation Process Documentation
 
-### Flujo de Instalación Completo
+### Documents Included
+
+- **README.md** - This file with installation and configuration guides
+- **NMAP_DEMONSTRATION.md** - Comprehensive nmap tool demonstration, Cyber Kill Chain analysis, and comparative usage across Kali and Parrot
+
+### Complete Installation Flow
 
 ```
 ┌─────────────────────────────────┐
-│ Ejecutar menu script             │
+│ Run menu script                  │
 │ ./install_kali_parrot_menu.sh   │
 └────────────┬────────────────────┘
              │
@@ -307,13 +313,13 @@ apt-get install -y nmap metasploit-framework
       │             │
       ▼             ▼
 ┌──────────┐  ┌──────────────┐
-│  Opción  │  │   Opción 2   │
+│  Option  │  │   Option 2   │
 │1-Vbox   │  │  Docker      │
 └────┬─────┘  └────┬─────────┘
      │             │
      ▼             ▼
 ┌─────────────────────────────┐
-│ Verificar dependencias      │
+│ Check dependencies          │
 │ - VirtualBox / Docker        │
 └────────┬────────────────────┘
          │
@@ -321,81 +327,93 @@ apt-get install -y nmap metasploit-framework
     │No       │Yes
     ▼         ▼
 ┌────────┐ ┌────────────────────┐
-│Install │ │ Descargar imagen   │
-│Tools   │ │ (~6GB o ~1GB)      │
+│Install │ │ Download image     │
+│Tools   │ │ (~6GB or ~1GB)     │
 └────┬───┘ └────────┬───────────┘
      │              │
      └──────┬───────┘
             │
             ▼
    ┌──────────────────┐
-   │ Configurar SO    │
+   │ Configure OS     │
    │ - Drivers        │
-   │ - Red           │
-   │ - Permisos      │
+   │ - Network        │
+   │ - Permissions    │
    └──────┬───────────┘
           │
           ▼
    ┌──────────────────┐
-   │ ✓ Instalación   │
-   │   Completada     │
+   │ ✓ Installation   │
+   │   Complete       │
    └──────────────────┘
 ```
 
-### Proceso Paso a Paso - VirtualBox (Kali Linux)
+### Step-by-Step Process - VirtualBox (Kali Linux)
 
-**Tiempo estimado:** 15-30 minutos (depende del ancho de banda)
+**Estimated Time:** 15-30 minutes (depends on bandwidth)
 
-1. **Verificación de Dependencias**
-   - Revisa si VirtualBox está instalado
-   - Si no, instala VirtualBox y extensiones
+1. **Dependency Check**
+   - Checks if VirtualBox is installed
+   - If not, installs VirtualBox and extensions
 
-2. **Descarga de Imagen** (~6GB)
-   - Descarga imagen oficial desde cdimage.kali.org
-   - Valida integridad del archivo
+2. **Image Download** (~6GB)
+   - Downloads official image from cdimage.kali.org
+   - Validates file integrity
 
-3. **Importación a VirtualBox**
-   - Extrae archivo .7z
-   - Importa imagen .vbox
-   - Registra VM en VirtualBox
+3. **VirtualBox Import**
+   - Extracts .7z file
+   - Imports .vbox image
+   - Registers VM in VirtualBox
 
-4. **Configuración Inicial**
-   - Establece memoria RAM
-   - Configura CPUs asignadas
-   - Configura red (NAT o Bridged)
+4. **Initial Configuration**
+   - Sets RAM memory
+   - Configures assigned CPUs
+   - Configures network (NAT or Bridged)
 
-5. **Inicio y Acceso**
-   - Inicia máquina virtual
-   - Usuario/Contraseña por defecto: `kali`/`kali`
+5. **Start and Access**
+   - Launches virtual machine
+   - Default Username/Password: `kali`/`kali`
 
-### Proceso Paso a Paso - Docker (Parrot OS)
+### Step-by-Step Process - Docker (Parrot OS)
 
-**Tiempo estimado:** 3-10 minutos
+**Estimated Time:** 3-10 minutes
 
-1. **Verificación de Dependencias**
-   - Revisa si Docker está instalado
-   - Si no, instala Docker y configura permisos
+1. **Dependency Check**
+   - Checks if Docker is installed
+   - If not, installs Docker and configures permissions
 
-2. **Descarga de Imagen** (~1GB)
-   - Intenta descargar `parrotsec/security`
-   - Si falla, fallback a `parrot:latest`
+2. **Image Download** (~1GB)
+   - Attempts to download `parrotsec/security`
+   - Falls back to `parrot:latest` if first fails
 
-3. **Nmap Pre-instalación**
-   - Ejecuta container temporal
-   - Instala Nmap en la imagen
-   - Confierte en imagen de trabajo
+3. **Nmap Pre-installation**
+   - Runs temporary container
+   - Installs Nmap in the image
+   - Converts to working image
 
-4. **Inicio del Container**
-   - Crea container interactivo
-   - Proporciona acceso bash
+4. **Container Start**
+   - Creates interactive container
+   - Provides bash access
 
 ---
 
-## 🛠️ Herramientas Disponibles por Instalación
+## 🛠️ Available Tools by Installation
+
+### Nmap Network Reconnaissance Tool
+
+**Primary Tool:** Nmap (Network Mapper) is included in this course for network reconnaissance and is classified in the **Reconnaissance Phase** of the Cyber Kill Chain.
+
+**Comprehensive Documentation:**
+See [NMAP_DEMONSTRATION.md](NMAP_DEMONSTRATION.md) for:
+- Nmap Cyber Kill Chain classification
+- Practical demonstrations in Kali Linux
+- Practical demonstrations in Parrot OS Docker
+- Analogous tools comparison (Masscan, Netstat, SS, etc.)
+- Educational use cases and exercises
 
 ### Kali Linux (VirtualBox)
 
-**Herramientas de Información Gathering:**
+**Information Gathering Tools:**
 ```bash
 nmap              # Port scanning
 whois             # Domain information
@@ -403,7 +421,7 @@ dig               # DNS queries
 curl/wget         # Web requests
 ```
 
-**Herramientas de Análisis:**
+**Analysis Tools:**
 ```bash
 wireshark         # Network packet analysis
 tcpdump           # Packet capture
@@ -412,11 +430,11 @@ metasploit        # Exploitation framework
 aircrack-ng       # WiFi security
 ```
 
-**Acceso completo a más de 600 herramientas preinstaladas**
+**Complete access to 600+ pre-installed tools**
 
 ### Parrot OS (Docker)
 
-**Herramientas CLI Optimizadas:**
+**Optimized CLI Tools:**
 ```bash
 nmap              # Port scanning
 curl              # HTTP requests
@@ -424,7 +442,7 @@ git               # Version control
 apache2/nginx     # Web servers
 ```
 
-**Instalable bajo demanda:**
+**Installable on demand:**
 ```bash
 apt-get install -y metasploit-framework
 apt-get install -y burpsuite
@@ -597,7 +615,8 @@ VBoxManage modifyvm "Kali Linux 2025.4" --nic1 bridged --bridgeadapter1 eth0
 
 ```
 /home/ervin/Desktop/kali/
-├── README.md                          # This file
+├── README.md                          # This file - Installation and configuration guide
+├── NMAP_DEMONSTRATION.md              # Nmap tool guide, Cyber Kill Chain, demonstrations
 ├── install_kali_parrot_menu.sh        # Menu selection script
 ├── install_kali_vbox.sh               # VirtualBox installation (Kali Linux)
 ├── install_parrot_docker.sh           # Docker installation (Parrot OS)
@@ -643,57 +662,57 @@ rm -f kali-linux-*.7z
 
 ---
 
-## 🎓 Casos de Uso Educativos
+## 🎓 Educational Use Cases
 
-### Para Exposiciones con Kali Linux (VirtualBox)
+### For Presentations with Kali Linux (VirtualBox)
 
-**Tema: Reconocimiento de Red**
+**Topic: Network Reconnaissance**
 ```bash
-# Demostración de nmap con GUI
+# Nmap demonstration with GUI
 nmap -sV target-host
-netstat -tuln  # Ver conexiones establecidas
+netstat -tuln  # View established connections
 ```
 
-**Tema: Análisis de Tráfico**
+**Topic: Traffic Analysis**
 ```bash
-# Wireshark - Captura visual de paquetes
+# Wireshark - Visual packet capture
 wireshark &
 
-# O tcpdump en terminal
+# Or tcpdump from terminal
 sudo tcpdump -i eth0 -w capture.pcap
 ```
 
-**Tema: Evaluación de Aplicaciones Web**
+**Topic: Web Application Assessment**
 ```bash
-# Burp Suite - Análisis interactivo
+# Burp Suite - Interactive analysis
 burp &
 
-# O usar curl desde terminal
+# Or use curl from terminal
 curl -X GET http://target.com
 ```
 
-### Para Exposiciones con Parrot OS (Docker)
+### For Presentations with Parrot OS (Docker)
 
-**Tema: Automatización de Scanning**
+**Topic: Scanning Automation**
 ```bash
-# Ejecutar escaneos desde Docker
+# Run scans from Docker
 sudo docker run -it parrotsec/security bash
 nmap -p- -sV target-host > scan-results.txt
 ```
 
-**Tema: Pentesting CLI-based**
+**Topic: CLI-based Pentesting**
 ```bash
-# Ejercicios de línea de comandos
+# Command-line exercises
 apt-get update
 apt-get install -y metasploit-framework
 
-# Iniciar MSF
+# Start MSF
 msfconsole
 ```
 
-**Tema: Scripting y Automatización**
+**Topic: Scripting and Automation**
 ```bash
-# Desarrollar scripts personalizados
+# Develop custom scripts
 cat > test-script.sh << 'EOF'
 #!/bin/bash
 for port in {20..25}; do
@@ -704,40 +723,106 @@ chmod +x test-script.sh
 ./test-script.sh
 ```
 
-### Flujo de Clase Sugerido
+### Suggested Class Flow
 
-**Día 1-3: Conceptos Básicos → Kali (VirtualBox)**
-- Interfaz visual
-- Herramientas con GUI
-- Exámenes interactivos
+**Day 1-3: Basic Concepts → Kali (VirtualBox)**
+- Visual interface
+- GUI tools
+- Interactive labs
 
-**Día 4-7: Herramientas Avanzadas → Parrot (Docker)**
-- Demostraciones CLI rápidas
-- Scripting y automatización
-- Laboratorios de escalabilidad
+**Day 4-7: Advanced Tools → Parrot (Docker)**
+- Quick CLI demonstrations
+- Scripting and automation
+- Scalability labs
 
 ---
 
-## 📋 Checklist de Configuración
+## 🔍 Nmap Tool Demonstration & Analysis
 
-### Antes de Exposición (Kali Linux)
+### Purpose
 
-- [ ] VM iniciada y probada
-- [ ] Contraseña cambiada (`passwd`)
-- [ ] Sistema actualizado (`apt-get update && upgrade`)
-- [ ] Herramientas requeridas instaladas
-- [ ] Red configurada (NAT o Bridged según necesidad)
-- [ ] Snapshots creados como backup
-- [ ] Demostración practicada
+This course includes **Nmap (Network Mapper)** as the primary network reconnaissance tool. A comprehensive guide is provided to demonstrate its use across both operating systems and classify it within the cybersecurity attack framework.
 
-### Antes de Exposición (Parrot OS)
+### What's Included
 
-- [ ] Docker corriendo (`docker ps`)
-- [ ] Imagen descargada correctamente
-- [ ] Container conectado a la red
-- [ ] Herramientas CLI instaladas
-- [ ] Scripts de demostración preparados
-- [ ] Conexión a internet verificada
+The [NMAP_DEMONSTRATION.md](NMAP_DEMONSTRATION.md) document provides:
+
+1. **Cyber Kill Chain Classification**
+   - Nmap's role in the Reconnaissance phase
+   - Attack workflow analysis
+   - Defensive perspectives
+
+2. **Practical Demonstrations**
+   - Running nmap on Kali Linux (VirtualBox)
+   - Running nmap on Parrot OS (Docker)
+   - Various scan types and use cases
+
+3. **Analogous Tools Analysis**
+   - Masscan (ultra-fast scanning)
+   - Netstat (local port inspection)
+   - SS Tool (modern socket statistics)
+   - Angry IP Scanner (GUI alternative)
+
+4. **Comparative Demonstrations**
+   - Performance comparison (Kali vs Docker)
+   - When to use each environment
+   - Best practices for each OS
+
+5. **Practical Exercises**
+   - Network discovery
+   - Service enumeration
+   - Comprehensive scanning
+   - Vulnerability pre-scanning
+
+### Quick Start - Nmap Examples
+
+**Kali Linux:**
+```bash
+# Simple host discovery
+nmap -sn 192.168.1.100
+
+# Service detection
+nmap -sV 192.168.1.100
+
+# Aggressive scan with GUI (Zenmap)
+sudo zenmap &
+```
+
+**Parrot OS (Docker):**
+```bash
+# Run inside container
+sudo docker run -it parrotsec/security bash
+nmap -sV 192.168.1.100
+
+# Or directly from host
+sudo docker run -it parrotsec/security \
+  nmap -sV 192.168.1.100
+```
+
+**→ For complete documentation, see [NMAP_DEMONSTRATION.md](NMAP_DEMONSTRATION.md)**
+
+---
+
+## 📋 Configuration Checklist
+
+### Before Presentation (Kali Linux)
+
+- [ ] VM started and tested
+- [ ] Password changed (`passwd`)
+- [ ] System updated (`apt-get update && upgrade`)
+- [ ] Required tools installed
+- [ ] Network configured (NAT or Bridged as needed)
+- [ ] Snapshots created as backup
+- [ ] Presentation practiced
+
+### Before Presentation (Parrot OS)
+
+- [ ] Docker running (`docker ps`)
+- [ ] Image downloaded correctly
+- [ ] Container connected to network
+- [ ] CLI tools installed
+- [ ] Demonstration scripts prepared
+- [ ] Internet connection verified
 
 ---
 
@@ -777,11 +862,37 @@ docker stop container-id               # Stop container
 
 ---
 
-## 📌 Resumen Ejecutivo para Profesores
+## 📌 Executive Summary for Instructors
 
-Este proyecto automatiza la instalación de dos sistemas operativos de pentesting utilizando estrategias complementarias:
+This project automates the installation of two penetration testing operating systems using complementary strategies:
 
-- **Kali Linux (VirtualBox):** Para exposiciones que requieren interfaz gráfica, herramientas complejas, y un entorno persistente para laboratorios
-- **Parrot OS (Docker):** Para demostraciones rápidas, enseñanza de CLI, y ejercicios de automatización
+- **Kali Linux (VirtualBox):** For presentations requiring a graphical interface, complex tools, and a persistent environment for labs
+- **Parrot OS (Docker):** For quick demonstrations, CLI teaching, and automation exercises
 
-Ambas instalaciones se documentan completamente en este README, justificando la elección de modalidad y proporcionando guías paso a paso.
+**Both installations are fully documented in this README, justifying the choice of modality and providing step-by-step guides.**
+
+### Included Documentation
+
+1. **README.md** (this file)
+   - Installation procedures for both operating systems
+   - System requirements and prerequisites
+   - Educational use cases and class flow
+   - Configuration checklists
+
+2. **NMAP_DEMONSTRATION.md** (comprehensive tool guide)
+   - Network reconnaissance tool demonstration
+   - Cyber Kill Chain classification and analysis
+   - Practical examples for both Kali and Parrot
+   - Comparison with analogous tools
+   - Educational exercises
+
+### Course Objectives Met
+
+✅ Uses Kali Linux and Parrot OS operating systems  
+✅ Implements different installation modalities (VM + Docker)  
+✅ Documents complete installation processes  
+✅ Provides justification for each modality choice  
+✅ Includes assigned tool (Nmap) with full documentation  
+✅ Identifies analogous tools with comparative analysis  
+✅ Classifies tools within Cyber Kill Chain framework  
+✅ Provides demonstrations in both operating systems
