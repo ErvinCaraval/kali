@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  vulnerable-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    container_name: vulnerable-app-kali-parrot
+    
+    # Network configuration
+    networks:
+      - vulnerable-network
+    
+    # Port mapping
+    ports:
+      - "8080:8080"    # HTTP - Web Application
+      - "2222:2222"    # SSH - Old OpenSSH
+      - "2121:2121"    # FTP - File Transfer
+      - "2323:2323"    # Telnet - Unencrypted remote
+      - "2525:2525"    # SMTP - Email service
+    
+    # Resource limits
+    resources:
+      limits:
+        cpus: '2'
+        memory: 512M
+      reservations:
+        cpus: '1'
+        memory: 256M
+    
+    # Restart policy
+    restart_policy:
+      condition: on-failure
+      delay: 5s
+      max_attempts: 3
+      window: 120s
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Environment variables
+    environment:
+      - PYTHONUNBUFFERED=1
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+networks:
+  vulnerable-network:
+    driver: bridge
+
+# Instructions:
+# 1. Build: docker-compose build
+# 2. Run:   docker-compose up -d
+# 3. Check: docker-compose logs -f
+# 4. Stop:  docker-compose down

@@ -615,29 +615,73 @@ VBoxManage modifyvm "Kali Linux 2025.4" --nic1 bridged --bridgeadapter1 eth0
 
 ```
 /home/ervin/Desktop/kali/
-├── README.md                          # This file - Installation and configuration guide
-├── NMAP_DEMONSTRATION.md              # Nmap tool guide, Cyber Kill Chain, demonstrations
-├── NMAP_REAL_WORLD_SCENARIO.md        # Practical real-world scanning scenarios
-├── vulnerable-app.py                  # Proof-of-Concept vulnerable application
-├── Dockerfile                         # Docker configuration for vulnerable app
-├── run_vulnerable_app.sh              # Easy script to run vulnerable app
-├── run_docker_vulnerable_app.sh       # Docker-based vulnerable app runner
-├── install_kali_parrot_menu.sh        # Menu selection script
-├── install_kali_vbox.sh               # VirtualBox installation (Kali Linux)
-├── install_parrot_docker.sh           # Docker installation (Parrot OS)
-└── .gitignore                         # (Optional) Git ignore file
+├── README.md                          # Main documentation
+├── SETUP.md                           # ⭐ Installation setup guide
+├── QUICK_START.md                     # 5-minute quick reference
+├── NMAP_DEMONSTRATION.md              # Nmap theory & concepts
+├── NMAP_REAL_WORLD_SCENARIO.md        # Practical scenarios
+├── Makefile                           # Unified execution commands
+├── vulnerable-app.py                  # ⭐ Vulnerable application
+├── start-vulnerable-app.sh            # ⭐ Universal launcher script
+├── docker-compose.yml                 # Docker orchestration
+├── Dockerfile                         # Docker image config
+├── run_vulnerable_app.sh              # Linux quick launcher
+├── run_docker_vulnerable_app.sh       # Docker quick launcher
+├── install_kali_parrot_menu.sh        # Kali/Parrot installer menu
+├── install_kali_vbox.sh               # VirtualBox installer
+├── install_parrot_docker.sh           # Parrot Docker installer
+└── .gitignore                         # Git ignore rules
 ```
 
-### Key Files Explained
+### Key Files for PoC Application
 
-| File | Purpose |
-|------|---------|
-| `README.md` | Main documentation with installation guides |
-| `NMAP_DEMONSTRATION.md` | Comprehensive Nmap tool documentation & Cyber Kill Chain analysis |
-| `NMAP_REAL_WORLD_SCENARIO.md` | **Practical real-world scanning examples with vulnerable app** |
-| `vulnerable-app.py` | **Proof-of-Concept application with intentional vulnerabilities** |
-| `run_vulnerable_app.sh` | **Quick-start script to run the vulnerable app** |
-| `Dockerfile` | Docker container configuration for vulnerable app |
+| File | Purpose | Use |
+|------|---------|-----|
+| **vulnerable-app.py** | Vulnerable application with 5 services | Core application |
+| **start-vulnerable-app.sh** | Universal launcher (auto-detects environment) | ⭐ Recommended |
+| **Makefile** | Unified commands for both environments | `make help` |
+| **docker-compose.yml** | Docker orchestration | `docker-compose up` |
+| **SETUP.md** | Complete installation guide | Read first! |
+
+---
+
+## 🚀 Quick Start - Both Environments
+
+### Kali Linux (VirtualBox)
+
+**Simplest Way:**
+```bash
+cd /home/ervin/Desktop/kali
+./start-vulnerable-app.sh
+```
+
+**Using Makefile:**
+```bash
+cd /home/ervin/Desktop/kali
+make kali-run
+```
+
+### Parrot OS (Docker)
+
+**Using Makefile:**
+```bash
+cd /home/ervin/Desktop/kali
+make docker-build
+make docker-up
+```
+
+**Using docker-compose:**
+```bash
+cd /home/ervin/Desktop/kali
+docker-compose up -d
+```
+
+**With Universal Script:**
+```bash
+# Inside Parrot container:
+cd /home/ervin/Desktop/kali
+./start-vulnerable-app.sh
+```
 
 ---
 
