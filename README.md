@@ -397,7 +397,7 @@ apt-get install -y nmap metasploit-framework
 
 ---
 
-## 🛠️ Available Tools by Installation
+## Available Tools by Installation
 
 ### Nmap Network Reconnaissance Tool
 
@@ -737,7 +737,7 @@ chmod +x test-script.sh
 
 ---
 
-## 🔍 Nmap Tool Demonstration & Analysis
+##  Nmap Tool Demonstration & Analysis
 
 ### Purpose
 
