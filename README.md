@@ -4,7 +4,7 @@ This repository contains automated scripts to install Kali Linux and Parrot OS u
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 
 1. [Prerequisites](#prerequisites)
 2. [System Requirements](#system-requirements)
@@ -152,18 +152,18 @@ The menu script automatically:
 
 ---
 
-## 🎯 Installation Modality Justification
+##  Installation Modality Justification
 
 This project implements two different installation modalities to meet the educational objectives of the course:
 
 ### Why VirtualBox for Kali Linux
 
 **Justification:**
-- ✅ **Full Graphical Interface:** Kali Linux requires access to GUI tools for visual demonstrations and teaching
-- ✅ **Isolated Environment:** VirtualBox provides complete isolation from the host system
-- ✅ **Snapshots:** Allows creating checkpoints before sensitive practical topics
-- ✅ **Persistence:** Changes remain between sessions, ideal for multi-day labs
-- ✅ **Full Access:** Complete OS control including networking, permissions, and kernels
+-  **Full Graphical Interface:** Kali Linux requires access to GUI tools for visual demonstrations and teaching
+-  **Isolated Environment:** VirtualBox provides complete isolation from the host system
+-  **Snapshots:** Allows creating checkpoints before sensitive practical topics
+-  **Persistence:** Changes remain between sessions, ideal for multi-day labs
+-  **Full Access:** Complete OS control including networking, permissions, and kernels
 
 **Use Cases:**
 - Interactive presentations of penetration testing tools
@@ -173,12 +173,12 @@ This project implements two different installation modalities to meet the educat
 ### Why Docker for Parrot OS
 
 **Justification:**
-- ✅ **Lightweight:** Perfect for demonstrating CLI tools without hypervisor overhead
-- ✅ **Portability:** Works identically on any machine with Docker
-- ✅ **Reproducibility:** Guarantees everyone has the exact same environment
-- ✅ **Resource Efficiency:** Uses less CPU, RAM, and disk than VirtualBox
-- ✅ **Fast Deployment:** Quick access to tools for rapid demonstrations
-- ✅ **Scalability:** Easy to create multiple instances for labs
+-  **Lightweight:** Perfect for demonstrating CLI tools without hypervisor overhead
+-  **Portability:** Works identically on any machine with Docker
+-  **Reproducibility:** Guarantees everyone has the exact same environment
+-  **Resource Efficiency:** Uses less CPU, RAM, and disk than VirtualBox
+-  **Fast Deployment:** Quick access to tools for rapid demonstrations
+-  **Scalability:** Easy to create multiple instances for labs
 
 **Use Cases:**
 - Quick CLI demonstrations
@@ -294,7 +294,7 @@ apt-get install -y nmap metasploit-framework
 
 ---
 
-## 📚 Detailed Installation Process Documentation
+## Detailed Installation Process Documentation
 
 ### Documents Included
 
@@ -596,7 +596,7 @@ VBoxManage modifyvm "Kali Linux 2025.4" --nic1 bridged --bridgeadapter1 eth0
 
 ## Security Notes
 
-⚠️ **Important Security Reminders:**
+  **Important Security Reminders:**
 
 1. **Change Default Password:** Always change the default `kali` password immediately
 2. **Keep Updated:** Regularly update Kali Linux:
@@ -662,7 +662,7 @@ rm -f kali-linux-*.7z
 
 ---
 
-## 🎓 Educational Use Cases
+##  Educational Use Cases
 
 ### For Presentations with Kali Linux (VirtualBox)
 
@@ -803,7 +803,7 @@ sudo docker run -it parrotsec/security \
 
 ---
 
-## 📋 Configuration Checklist
+##  Configuration Checklist
 
 ### Before Presentation (Kali Linux)
 
@@ -862,7 +862,7 @@ docker stop container-id               # Stop container
 
 ---
 
-## 📌 Executive Summary for Instructors
+##  Executive Summary for Instructors
 
 This project automates the installation of two penetration testing operating systems using complementary strategies:
 
@@ -886,13 +886,4 @@ This project automates the installation of two penetration testing operating sys
    - Comparison with analogous tools
    - Educational exercises
 
-### Course Objectives Met
 
-✅ Uses Kali Linux and Parrot OS operating systems  
-✅ Implements different installation modalities (VM + Docker)  
-✅ Documents complete installation processes  
-✅ Provides justification for each modality choice  
-✅ Includes assigned tool (Nmap) with full documentation  
-✅ Identifies analogous tools with comparative analysis  
-✅ Classifies tools within Cyber Kill Chain framework  
-✅ Provides demonstrations in both operating systems
