@@ -1,14 +1,30 @@
 #!/bin/bash
-# install_kali_vbox.sh - Install and configure Kali Linux in VirtualBox
+# install_kali_vbox.sh - Install and configure Kali Linux in VirtualBox (Linux, macOS, Windows/WSL2)
 
 set -e  # Exit on error
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Detect OS
+detect_os() {
+    case "$(uname -s)" in
+        Linux*) OS="Linux" ;;
+        Darwin*) OS="macOS" ;;
+        MINGW* | MSYS* | CYGWIN*) OS="Windows" ;;
+        *) OS="Unknown" ;;
+    esac
+}
+
+detect_os
+
+# Colors for output (disable on Windows)
+if [ "$OS" = "Windows" ]; then
+    RED=''; GREEN=''; YELLOW=''; BLUE=''; NC=''
+else
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    NC='\033[0m'
+fi
 
 # Configuration
 URL="https://cdimage.kali.org/kali-2025.4/kali-linux-2025.4-virtualbox-amd64.7z"
@@ -37,24 +53,63 @@ print_info() {
 check_dependencies() {
     print_header "Checking Dependencies"
     
-    # Check for wget
-    if ! command -v wget &> /dev/null; then
-        print_info "Installing wget..."
-        sudo apt-get update && sudo apt-get install -y wget
+    # Check for wget/curl
+    if ! command -v wget &> /dev/null && ! command -v curl &> /dev/null; then
+        print_info "Installing wget/curl..."
+        case $OS in
+            Linux)
+                sudo apt-get update && sudo apt-get install -y wget
+                ;;
+            macOS)
+                brew install wget
+                ;;
+            Windows)
+                print_error "Please install wget or curl manually in WSL2"
+                return 1
+                ;;
+        esac
     fi
-    print_success "wget is available"
+    print_success "wget/curl is available"
     
     # Check for VirtualBox
     if ! command -v VBoxManage &> /dev/null; then
         print_info "Installing VirtualBox..."
-        sudo apt-get update && sudo apt-get install -y virtualbox virtualbox-dkms
+        case $OS in
+            Linux)
+                sudo apt-get update && sudo apt-get install -y virtualbox virtualbox-dkms
+                ;;
+            macOS)
+                print_info "Please install VirtualBox from: https://www.virtualbox.org/wiki/Downloads"
+                print_info "Or use: brew install virtualbox"
+                brew install virtualbox 2>/dev/null || {
+                    print_error "VirtualBox installation failed. Install manually from https://www.virtualbox.org"
+                    return 1
+                }
+                ;;
+            Windows)
+                print_error "VirtualBox must be installed on the host Windows system"
+                print_info "Download from: https://www.virtualbox.org/wiki/Downloads"
+                return 1
+                ;;
+        esac
     fi
     print_success "VirtualBox is installed"
     
     # Check for 7z
     if ! command -v 7z &> /dev/null; then
-        print_info "Installing p7zip-full..."
-        sudo apt-get update && sudo apt-get install -y p7zip-full
+        print_info "Installing 7zip..."
+        case $OS in
+            Linux)
+                sudo apt-get update && sudo apt-get install -y p7zip-full
+                ;;
+            macOS)
+                brew install p7zip
+                ;;
+            Windows)
+                print_error "7zip not found. Install with: choco install 7zip"
+                return 1
+                ;;
+        esac
     fi
     print_success "7zip is available"
 }
@@ -62,13 +117,27 @@ check_dependencies() {
 check_disk_space() {
     print_header "Checking Disk Space"
     
-    AVAILABLE_SPACE=$(df . | awk 'NR==2 {print int($4/1024/1024)}')
+    AVAILABLE_SPACE=0
+    case $OS in
+        Linux|macOS)
+            AVAILABLE_SPACE=$(df . | awk 'NR==2 {print int($4/1024/1024)}')
+            ;;
+        Windows)
+            # For Windows, try to use 'df' from Git Bash
+            AVAILABLE_SPACE=$(df . 2>/dev/null | awk 'NR==2 {print int($4/1024/1024)}' || echo "0")
+            ;;
+    esac
     
-    if [ "$AVAILABLE_SPACE" -lt "$REQUIRED_SPACE_GB" ]; then
+    if [ "$AVAILABLE_SPACE" -lt "$REQUIRED_SPACE_GB" ] && [ "$AVAILABLE_SPACE" -gt 0 ]; then
         print_error "Insufficient disk space. Required: ${REQUIRED_SPACE_GB}GB, Available: ${AVAILABLE_SPACE}GB"
         return 1
     fi
-    print_success "Sufficient disk space available: ${AVAILABLE_SPACE}GB"
+    
+    if [ "$AVAILABLE_SPACE" -gt 0 ]; then
+        print_success "Sufficient disk space available: ${AVAILABLE_SPACE}GB"
+    else
+        print_info "Could not determine disk space (continuing anyway)"
+    fi
 }
 
 download_image() {
@@ -80,10 +149,23 @@ download_image() {
     fi
     
     print_info "Downloading from: $URL"
-    if wget -c "$URL" -O "$FILE"; then
-        print_success "Image downloaded successfully"
+    
+    if command -v wget &> /dev/null; then
+        if wget -c "$URL" -O "$FILE"; then
+            print_success "Image downloaded successfully"
+        else
+            print_error "Failed to download image"
+            return 1
+        fi
+    elif command -v curl &> /dev/null; then
+        if curl -L -C - -o "$FILE" "$URL"; then
+            print_success "Image downloaded successfully"
+        else
+            print_error "Failed to download image"
+            return 1
+        fi
     else
-        print_error "Failed to download image"
+        print_error "Neither wget nor curl found. Cannot download image."
         return 1
     fi
 }
@@ -132,11 +214,19 @@ register_vm() {
 show_vm_info() {
     print_header "Virtual Machine Information"
     
-    VM_NAME=$(grep 'name=' "$(find . -maxdepth 2 -name "*.vbox" | head -n 1)" | grep -oP '(?<=name=")[^"]*' | head -n 1)
+    VBOX_FILE=$(find . -maxdepth 2 -name "*.vbox" 2>/dev/null | head -n 1)
+    
+    if [ -z "$VBOX_FILE" ]; then
+        print_error "Could not find .vbox file"
+        return 1
+    fi
+    
+    # Extract VM name using sed for cross-platform compatibility
+    VM_NAME=$(grep 'name=' "$VBOX_FILE" | sed -n 's/.*name="\([^"]*\)".*/\1/p' | head -n 1)
     
     echo -e "${GREEN}VM Name: $VM_NAME${NC}"
-    echo -e "${YELLOW}To start the VM, use one of these commands:${NC}"
-    echo -e "  VirtualBox GUI: ${BLUE}virtualbox${NC}"
+    echo -e "${YELLOW}To start the VM:${NC}"
+    echo -e "  VirtualBox GUI: ${BLUE}VirtualBox${NC}"
     echo -e "  Command line:   ${BLUE}VBoxManage startvm \"$VM_NAME\" --type gui${NC}"
     echo ""
     echo -e "${YELLOW}To access the VM via SSH after starting:${NC}"

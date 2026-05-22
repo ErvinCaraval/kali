@@ -1,14 +1,30 @@
 #!/bin/bash
-# install_parrot_docker.sh - Install Parrot Linux in Docker with Nmap
+# install_parrot_docker.sh - Install Parrot Linux in Docker with Nmap (Linux, macOS, Windows/WSL2)
 
 set -e  # Exit on error
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Detect OS
+detect_os() {
+    case "$(uname -s)" in
+        Linux*) OS="Linux" ;;
+        Darwin*) OS="macOS" ;;
+        MINGW* | MSYS* | CYGWIN*) OS="Windows" ;;
+        *) OS="Unknown" ;;
+    esac
+}
+
+detect_os
+
+# Colors for output (disable on Windows)
+if [ "$OS" = "Windows" ]; then
+    RED=''; GREEN=''; YELLOW=''; BLUE=''; NC=''
+else
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    NC='\033[0m'
+fi
 
 # Functions
 print_header() {
@@ -34,14 +50,36 @@ check_docker() {
     
     if ! command -v docker &> /dev/null; then
         print_info "Docker not found. Installing Docker..."
-        sudo apt-get update && sudo apt-get install -y docker.io
-        sudo systemctl enable --now docker
-        sudo usermod -aG docker $USER
-        
-        print_success "Docker installed successfully"
-        print_info "You need to log out and log back in, or run:"
-        print_info "  newgrp docker"
-        return 1
+        case $OS in
+            Linux)
+                # Linux installation
+                sudo apt-get update && sudo apt-get install -y docker.io
+                sudo systemctl enable --now docker
+                sudo usermod -aG docker $USER
+                
+                print_success "Docker installed successfully"
+                print_info "You need to log out and log back in, or run:"
+                print_info "  newgrp docker"
+                return 1
+                ;;
+            macOS)
+                # macOS installation
+                print_info "Installing Docker Desktop for macOS..."
+                print_info "Using Homebrew: brew install docker"
+                brew install docker || {
+                    print_error "Brew installation failed. Please install Docker Desktop manually:"
+                    print_info "Download from: https://www.docker.com/products/docker-desktop"
+                    return 1
+                }
+                print_success "Docker installed successfully"
+                ;;
+            Windows)
+                print_error "Docker must be installed on Windows via Docker Desktop"
+                print_info "Download from: https://www.docker.com/products/docker-desktop"
+                print_info "Or install WSL2 first, then use: apt-get install docker.io"
+                return 1
+                ;;
+        esac
     fi
     
     print_success "Docker is installed"
@@ -77,7 +115,13 @@ create_parrot_with_nmap() {
         IMAGE_NAME="parrot:latest"
     fi
     
-    CONTAINER_NAME="parrot-linux-nmap-$(date +%s)"
+    # Cross-platform timestamp generation
+    if command -v date &> /dev/null && date +%s > /dev/null 2>&1; then
+        TIMESTAMP=$(date +%s)
+    else
+        TIMESTAMP=$(printf "%(%s)T" -1)
+    fi
+    CONTAINER_NAME="parrot-linux-nmap-$TIMESTAMP"
     
     print_info "Installing Nmap in container..."
     sudo docker run --rm "$IMAGE_NAME" bash -c \
@@ -113,15 +157,25 @@ show_docker_info() {
     echo -e "  ${BLUE}docker images${NC}                       # List downloaded images"
     echo -e "  ${BLUE}docker stop <container-id>${NC}          # Stop container"
     echo ""
-    echo -e "${YELLOW}Note: This script uses parrotsec/security or parrot:latest images${NC}"
+    
+    if [ "$OS" = "Windows" ]; then
+        echo -e "${YELLOW}Note: Running from WSL2. For best performance, ensure Docker Desktop is configured to use WSL2 backend${NC}"
+    else
+        echo -e "${YELLOW}Note: This script uses $IMAGE_NAME image${NC}"
+    fi
 }
 
 # Main execution
 main() {
     print_header "Parrot Linux Docker Installation"
+    echo -e "${YELLOW}Detected OS: $OS${NC}"
+    
+    if [ "$OS" = "Windows" ]; then
+        echo -e "${YELLOW}Note: Windows detected. Ensure you're running WSL2 or Git Bash${NC}"
+    fi
     
     check_docker || {
-        print_error "Please run 'newgrp docker' or log out and back in, then restart the script"
+        print_error "Docker setup failed. Please check the instructions above and try again."
         exit 1
     }
     
